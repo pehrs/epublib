@@ -8,11 +8,14 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import javax.xml.parsers.ParserConfigurationException;
+
 import nl.siegmann.epublib.Constants;
 import nl.siegmann.epublib.domain.Book;
 import nl.siegmann.epublib.domain.MediaType;
 import nl.siegmann.epublib.domain.Resource;
 import nl.siegmann.epublib.domain.Resources;
+import nl.siegmann.epublib.domain.TableOfContents;
 import nl.siegmann.epublib.service.MediatypeService;
 import nl.siegmann.epublib.util.ResourceUtil;
 import nl.siegmann.epublib.util.StringUtil;
@@ -21,6 +24,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 /**
  * Reads an epub file.
@@ -98,9 +104,15 @@ public class EpubReader {
 		result.setOpfResource(packageResource);
 		Resource ncxResource = processNcxResource(packageResource, result);
 		result.setNcxResource(ncxResource);
+		// if no NCX try to parse TOC as xhtml
+		if(ncxResource==null) {
+			XHTMLTocParser.processTocResource(result);
+		}
 		result = postProcessBook(result);
 		return result;
 	}
+
+
 
 	private Book postProcessBook(Book book) {
 		if (bookProcessor != null) {

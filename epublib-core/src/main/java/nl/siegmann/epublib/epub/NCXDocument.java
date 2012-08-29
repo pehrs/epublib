@@ -89,8 +89,13 @@ public class NCXDocument {
 			}
 			Document ncxDocument = ResourceUtil.getAsDocument(ncxResource);
 			Element navMapElement = DOMUtil.getFirstElementByTagNameNS(ncxDocument.getDocumentElement(), NAMESPACE_NCX, NCXTags.navMap);
+			// FIXME: matti@pehrs.com: We need to check whether this is really a NCX doc
+			if(navMapElement==null) {
+				return null;
+			}
 			TableOfContents tableOfContents = new TableOfContents(readTOCReferences(navMapElement.getChildNodes(), book));
 			book.setTableOfContents(tableOfContents);
+			
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 		}
