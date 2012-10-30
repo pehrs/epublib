@@ -61,4 +61,12 @@ public class TOCReference extends TitledResourceReference implements Serializabl
 	public void setChildren(List<TOCReference> children) {
 		this.children = children;
 	}
+
+	@Override
+	public String toString() {
+		return "TOCReference [getFragmentId()=" + getFragmentId()
+				+ ", getTitle()=" + getTitle() + ", getResource()=" + getResource()
+				+ ", getResourceId()=" + getResourceId() + ", children="
+				+ children + "]";
+	}
 }

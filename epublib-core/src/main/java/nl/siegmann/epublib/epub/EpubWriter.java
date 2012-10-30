@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.nio.charset.Charset;
 import java.util.zip.CRC32;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -45,7 +46,7 @@ public class EpubWriter {
 
 	public void write(Book book, OutputStream out) throws IOException {
 		book = processBook(book);
-		ZipOutputStream resultStream = new ZipOutputStream(out);
+		ZipOutputStream resultStream = new ZipOutputStream(out, Charset.forName("UTF-8"));
 		writeMimeType(resultStream);
 		writeContainer(resultStream);
 		initTOCResource(book);

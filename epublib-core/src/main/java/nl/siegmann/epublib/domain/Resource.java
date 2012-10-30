@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.io.Serializable;
+import java.nio.charset.Charset;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -186,7 +187,7 @@ public class Resource implements Serializable {
 			
 			LOG.info("Initializing lazy resource " + fileName + "#" + this.href );
 			
-			ZipInputStream in = new ZipInputStream(new FileInputStream(this.fileName));
+			ZipInputStream in = new ZipInputStream(new FileInputStream(this.fileName), Charset.forName("UTF-8"));
 			
 			for(ZipEntry zipEntry = in.getNextEntry(); zipEntry != null; zipEntry = in.getNextEntry()) {
 				if(zipEntry.isDirectory()) {

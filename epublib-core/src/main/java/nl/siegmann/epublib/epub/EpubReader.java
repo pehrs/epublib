@@ -3,6 +3,7 @@ package nl.siegmann.epublib.epub;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.List;
 import java.util.zip.ZipEntry;
@@ -56,7 +57,7 @@ public class EpubReader {
 	 * @throws IOException
 	 */
 	public Book readEpub(InputStream in, String encoding) throws IOException {
-		return readEpub(new ZipInputStream(in), encoding);
+		return readEpub(new ZipInputStream(in, Charset.forName(encoding)), encoding);
 	}	
 	
 	/**
@@ -163,7 +164,7 @@ public class EpubReader {
 	private Resources readLazyResources( String fileName, String defaultHtmlEncoding,
 			List<MediaType> lazyLoadedTypes) throws IOException {		
 				
-		ZipInputStream in = new ZipInputStream(new FileInputStream(fileName));
+		ZipInputStream in = new ZipInputStream(new FileInputStream(fileName), Charset.forName("UTF-8"));
 		
 		Resources result = new Resources();
 		for(ZipEntry zipEntry = in.getNextEntry(); zipEntry != null; zipEntry = in.getNextEntry()) {

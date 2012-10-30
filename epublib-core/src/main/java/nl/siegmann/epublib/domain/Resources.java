@@ -289,6 +289,11 @@ public class Resources implements Serializable {
 		}
 		href = StringUtil.substringBefore(href, Constants.FRAGMENT_SEPARATOR_CHAR);
 		Resource result = resources.get(href);
+		// MATTI: if resource does not exist try under xhtml/ as some tools sets 
+		// the resources in the  xhtml/ dir but reports only the shallow filename
+		if(result==null) {
+			result = resources.get("xhtml/"+href);
+		}
 		return result;
 	}
 	
