@@ -3,6 +3,8 @@ package nl.siegmann.epublib.epub;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
@@ -125,7 +127,7 @@ public class NCXDocument {
 	private static TOCReference readTOCReference(Element navpointElement, Book book) {
 		String label = readNavLabel(navpointElement);
 		String reference = FilenameUtils.getPath(book.getSpine().getTocResource().getHref())+readNavReference(navpointElement);
-		String href = StringUtil.substringBefore(reference, Constants.FRAGMENT_SEPARATOR_CHAR);
+		String href = canonicalPath(StringUtil.substringBefore(reference, Constants.FRAGMENT_SEPARATOR_CHAR));
 		String fragmentId = StringUtil.substringAfter(reference, Constants.FRAGMENT_SEPARATOR_CHAR);
 		Resource resource = book.getResources().getByHref(href);
 		if (resource == null) {
@@ -137,7 +139,26 @@ public class NCXDocument {
 		return result;
 	}
 
-	
+
+	/**
+	 * Get the canonical path 
+	 * @param path
+	 * @return
+	 */
+	private static String canonicalPath(String path) {
+		if(path==null)  {
+			return null;
+		}
+		String normalized;
+		try {
+			normalized = new URI(path).normalize().getPath();
+		} catch (URISyntaxException e) {
+			log.error("Cannot normalize path "+path+" in NCX document");
+			return path;
+		}
+		return normalized;
+	}
+
 	private static String readNavReference(Element navpointElement) {
 		Element contentElement = DOMUtil.getFirstElementByTagNameNS(navpointElement, NAMESPACE_NCX, NCXTags.content);
 		String result = DOMUtil.getAttribute(contentElement, NAMESPACE_NCX, NCXAttributes.src);

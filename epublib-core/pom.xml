@@ -65,10 +65,11 @@
 			<phase>generate-sources</phase>
 			<configuration>
 			  <tasks>
-
+			    <!-- https://epub-samples.googlecode.com/files/moby-dick-20120118.epub -->
+			    <!-- https://epub-samples.googlecode.com/files/cc-shared-culture-20120130.epub -->
 			    <echo>Getting test data...</echo>
 			    <mkdir dir="${build.directory}"/>
-			    <get src="https://epub-samples.googlecode.com/files/moby-dick-mo-20120214.epub"  
+			    <get src="https://epub-samples.googlecode.com/files/moby-dick-20120118.epub"  
 				 dest="${build.directory}/sample.epub"
 				 skipexisting="true"
 				 />

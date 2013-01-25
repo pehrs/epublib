@@ -113,11 +113,37 @@ class DOMUtil {
 		NodeList childNodes = parentElement.getChildNodes();
 		for (int i = 0; i < childNodes.getLength(); i++) {
 			Node node = childNodes.item(i);
-			if ((node == null) ||
-					(node.getNodeType() != Node.TEXT_NODE)) {
-				continue;
+			if(node!=null) {
+				switch(node.getNodeType()) {
+				case Node.TEXT_NODE:
+					result.append(((Text) node).getData());
+					break;
+				default:
+				}
 			}
-			result.append(((Text) node).getData());
+		}
+		return result.toString().trim();
+	}
+
+	public static String getDeepTextChildrenContent(Element parentElement) {
+		if(parentElement == null) {
+			return null;
+		}
+		StringBuilder result = new StringBuilder();
+		NodeList childNodes = parentElement.getChildNodes();
+		for (int i = 0; i < childNodes.getLength(); i++) {
+			Node node = childNodes.item(i);
+			if(node!=null) {
+				switch(node.getNodeType()) {
+				case Node.TEXT_NODE:
+					result.append(((Text) node).getData());
+					break;
+				case Node.ELEMENT_NODE:
+					result.append(getTextChildrenContent((Element)node));
+					break;
+				default:
+				}
+			}
 		}
 		return result.toString().trim();
 	}

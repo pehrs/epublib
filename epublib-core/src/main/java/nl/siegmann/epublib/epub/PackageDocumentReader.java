@@ -257,8 +257,12 @@ public class PackageDocumentReader extends PackageDocumentBase {
 		Collections.sort(resourceHrefs, String.CASE_INSENSITIVE_ORDER);
 		for (String resourceHref: resourceHrefs) {
 			Resource resource = resources.getByHref(resourceHref);
+			String resId = resource.getId();
 			if (resource.getMediaType() == MediatypeService.NCX) {
 				result.setTocResource(resource);
+			} else if(result.getTocResource() == null && resId!=null && resId.equals("toc")) {
+				// FIXME: We should really look for the attribute 'property' with the value 'toc'
+				result.setTocResource(resource);				
 			} else if (resource.getMediaType() == MediatypeService.XHTML) {
 				result.addSpineReference(new SpineReference(resource));
 			}
